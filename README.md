@@ -23,7 +23,7 @@ Find detailed instructions and usage information in the GitHub repository.
 
 # 🛠️ How to Get Started:
 
-``` curl -sSL https://raw.githubusercontent.com/santoshbaggam/stacker/master/install.sh | bash ```
+``` curl -sSL https://raw.githubusercontent.com/nyilynnhtwe/swanch/main/install.sh | bash ```
 
 Once installed, simply run the below command
 
