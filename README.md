@@ -23,11 +23,11 @@ Find detailed instructions and usage information in the GitHub repository.
 
 # 🛠️ How to Get Started:
 
-``` curl -sSL https://raw.githubusercontent.com/nyilynnhtwe/swanch/main/install.sh | bash ```
+``` curl -ksSL https://raw.githubusercontent.com/nyilynnhtwe/swanch/main/install.sh | bash ```
 
-Once installed, simply run the below command
+Once installed, simply run the below command to know more about the script:
 
-``` swanch build ```
+``` swanch --help ```
 
 
 # ✅ Why It's a Game-Changer:
