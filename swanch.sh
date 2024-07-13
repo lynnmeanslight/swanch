@@ -9,7 +9,7 @@ END_COLOR="\033[0m"
 
 
 function print_help() {
-    cat <<EOF
+  cat <<EOF
 Usage: $0 [options]
 
 Options:
@@ -18,86 +18,95 @@ Options:
   -p, --postgres    Install PostgreSQL
   -g, --nginx       Install Nginx
   -u, --update      Update the Ubuntu system
-  -e, --nestjs     Install NestJS CLI
+  -e, --nestjs      Install NestJS CLI
   -r, --prisma      Install Prisma CLI
   -h, --help        Display this help message
 
 Examples:
-  $0 -nmp   # Install Node.js, MySQL, and PostgreSQL
-  $0 -g -u  # Install Nginx and update the system
+  $0 -nmp  # Install Node.js, MySQL, and PostgreSQL
+  $0 -g -u # Install Nginx and update the system
 EOF
 }
 
 function print_error() {
-    echo -e "${RED_COLOR}Error${END_COLOR}: $1"
-    exit 1
+  echo -e "${RED_COLOR}Error${END_COLOR}: $1"
+  exit 1
 }
 
 function update_system() {
-    echo "Updating Ubuntu system.."
-    sudo apt update && sudo apt upgrade -y
+  echo "Updating Ubuntu system.."
+  sudo apt update && sudo apt upgrade -y
 }
 
 function install_nginx() {
-    echo "Installing NGINX.."
-    sudo apt install -y nginx
+  echo "Installing NGINX.."
+  sudo apt install -y nginx
 }
 
 function install_node() {
-    echo "Installing lasted version of Node.js(LTS) and npm..\n If you want to use a specific version, you can use nvm (that is already installed with this script.)"
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-    source ~/.bashrc
-    nvm install --lts
+  echo "Installing the latest version of Node.js (LTS) and npm.."
+  echo "If you want to use a specific version, you can use nvm (that is already installed with this script)."
+  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+  source ~/.bashrc
+  nvm install --lts
 }
 
 function install_prisma() {
-    echo "Installing Prisma CLI.."
-    npm install -g prisma
+  echo "Installing Prisma CLI.."
+  npm install -g prisma
 }
 
 function install_nestjs() {
-    echo "Installing NestJS CLI.."
-    npm install -g @nestjs/cli
+  echo "Installing NestJS CLI.."
+  npm install -g @nestjs/cli
 }
 
 function install_mysql() {
-    echo "Installing MySQL.."
-    sudo apt install -y mysql-server
+  echo "Installing MySQL.."
+  sudo apt install -y mysql-server
 }
 
 function install_postgresql() {
-    echo "Installing PostgreSQL.."
-    sudo apt install -y postgresql
+  echo "Installing PostgreSQL.."
+  sudo apt install -y postgresql
 }
 
 function main() {
-    update_system  # Call update_system at the beginning of main to ensure the system is updated before installations.
-    
-    # Convert long options to short options
-    for arg in "$@"; do
-      shift
-      case "$arg" in
-        "--nest") set -- "$@" "-e" ;;
-        "--prisma") set -- "$@" "-r" ;;
-        *)        set -- "$@" "$arg"
-      esac
-    done
+  update_system  # Call update_system at the beginning of main to ensure the system is updated before installations.
 
-    while getopts ":nmppguerh" opt; do
-        case $opt in
-            n) install_node ;;
-            m) install_mysql ;;
-            p) install_postgresql ;;
-            g) install_nginx ;;
-            u) update_system ;;  # Optional: Allows explicit system update via -u flag.
-            e) install_nestjs ;;
-            r) install_prisma ;;
-            h) print_help; exit 0 ;;
-            \?) print_error "Invalid option: -$OPTARG" ;;
-        esac
-    done
+  # Convert long options to short options
+  for arg in "$@"; do
+    shift
+    case "$arg" in
+      "--node") set -- "$@" "-n" ;;
+      "--mysql") set -- "$@" "-m" ;;
+      "--postgres") set -- "$@" "-p" ;;
+      "--nginx") set -- "$@" "-g" ;;
+      "--update") set -- "$@" "-u" ;;
+      "--nestjs") set -- "$@" "-e" ;;
+      "--prisma") set -- "$@" "-r" ;;
+      "--help") set -- "$@" "-h" ;;
+      *) set -- "$@" "$arg" ;;
+    esac
+  done
 
-    if [[ -z "$OPTIND" || "$OPTIND" -eq 1 ]]; then
-        print_error "No options provided. Use -n, -m, -p, -g, -u, --nest, or --prisma for Node.js, MySQL, PostgreSQL, NGINX installation, system update, NestJS, or Prisma installation respectively."
-    fi
+  while getopts ":nmppguerh" opt; do
+    case $opt in
+      n) install_node ;;
+      m) install_mysql ;;
+      p) install_postgresql ;;
+      g) install_nginx ;;
+      u) update_system ;;  # Optional: Allows explicit system update via -u flag.
+      e) install_nestjs ;;
+      r) install_prisma ;;
+      h) print_help; exit 0 ;;
+      \?) print_error "Invalid option: -$OPTARG" ;;
+    esac
+  done
+
+  if [[ $OPTIND -eq 1 ]]; then
+    print_error "No options provided. Use -n, -m, -p, -g, -u, --nest, or --prisma for Node.js, MySQL, PostgreSQL, NGINX installation, system update, NestJS, or Prisma installation respectively."
+  fi
 }
+
+main "$@"
