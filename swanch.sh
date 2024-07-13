@@ -10,6 +10,8 @@ END_COLOR="\033[0m"
 
 function print_help() {
   cat <<EOF
+Automate your NODEJS dev setup with this all-in-one Bash script on your server!
+
 Usage: $0 [options]
 
 Options:
@@ -72,8 +74,6 @@ function install_postgresql() {
 }
 
 function main() {
-  update_system  # Call update_system at the beginning of main to ensure the system is updated before installations.
-
   # Convert long options to short options
   for arg in "$@"; do
     shift
